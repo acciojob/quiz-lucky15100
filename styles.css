@@ -31,6 +31,8 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  width: 100%; /* Add this line */
+  box-sizing: border-box; /* Add this line */
 }
 
 button:hover {
