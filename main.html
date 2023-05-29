@@ -1,16 +1,118 @@
 <!DOCTYPE html>
-
 <html>
-
 <head>
-	<link rel="stylesheet" href="styles.css">
+  <title>Quiz App</title>
+  <style>
+    .quiz-container {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    #submit {
+      margin-top: 20px;
+    }
+  </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+  <div class="quiz-container" id="quiz">
+    <h2 id="question"></h2>
+    <label>
+      <input type="radio" name="options" id="a">
+      <span id="a_text"></span>
+    </label>
+    <label>
+      <input type="radio" name="options" id="b">
+      <span id="b_text"></span>
+    </label>
+    <label>
+      <input type="radio" name="options" id="c">
+      <span id="c_text"></span>
+    </label>
+    <label>
+      <input type="radio" name="options" id="d">
+      <span id="d_text"></span>
+    </label>
+    <button id="submit">Submit</button>
+  </div>
 
-</body>
+  <script>
+    const quizData = [
+      {
+        question: "Which language runs in a web browser?",
+        a: "Java",
+        b: "C",
+        c: "Python",
+        d: "JavaScript",
+        correct: "d"
+      },
+      {
+        question: "What does CSS stand for?",
+        a: "Central Style Sheets",
+        b: "Cascading Style Sheets",
+        c: "Cascading Simple Sheets",
+        d: "Cars SUVs Sailboats",
+        correct: "b"
+      },
+      {
+        question: "What does HTML stand for?",
+        a: "Hypertext Markup Language",
+        b: "Hypertext Markdown Language",
+        c: "Hyperloop Machine Language",
+        d: "Helicopters Terminals Motorboats Lamborginis",
+        correct: "a"
+      },
+      {
+        question: "What year was JavaScript launched?",
+        a: "1996",
+        b: "1995",
+        c: "1994",
+        d: "none of the above",
+        correct: "b"
+      }
+    ];
 
-</html>
+    const quizContainer = document.getElementById("quiz");
+    const questionElement = document.getElementById("question");
+    const optionElements = document.querySelectorAll("input[name='options']");
+    const optionLabels = document.querySelectorAll("label span");
+    const submitButton = document.getElementById("submit");
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const currentQuizData = quizData[currentQuestion];
+      questionElement.textContent = currentQuizData.question;
+      optionLabels[0].textContent = currentQuizData.a;
+      optionLabels[1].textContent = currentQuizData.b;
+      optionLabels[2].textContent = currentQuizData.c;
+      optionLabels[3].textContent = currentQuizData.d;
+      deselectOptions();
+    }
+
+    function getSelectedOption() {
+      let selectedOption = undefined;
+      optionElements.forEach(optionElement => {
+        if (optionElement.checked) {
+          selectedOption = optionElement.id;
+        }
+      });
+      return selectedOption;
+    }
+
+    function deselectOptions() {
+      optionElements.forEach(optionElement => {
+        optionElement.checked = false;
+      });
+    }
+
+    function submitAnswer() {
+      const selected
