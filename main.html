@@ -3,48 +3,61 @@
 <head>
   <title>Quiz App</title>
   <style>
-    .quiz-container {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
+    /* CSS styles for the quiz app */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    #question {
-      font-size: 20px;
-      margin-bottom: 20px;
+    .quiz-container {
+      max-width: 500px;
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      font-size: 24px;
     }
     label {
       display: block;
       margin-bottom: 10px;
     }
-    #submit {
+    button {
       margin-top: 20px;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <div class="quiz-container" id="quiz">
-    <h2 id="question"></h2>
+    <h1 id="question"></h1>
     <label>
-      <input type="radio" name="options" id="a">
+      <input type="radio" name="answer" id="a">
       <span id="a_text"></span>
     </label>
     <label>
-      <input type="radio" name="options" id="b">
+      <input type="radio" name="answer" id="b">
       <span id="b_text"></span>
     </label>
     <label>
-      <input type="radio" name="options" id="c">
+      <input type="radio" name="answer" id="c">
       <span id="c_text"></span>
     </label>
     <label>
-      <input type="radio" name="options" id="d">
+      <input type="radio" name="answer" id="d">
       <span id="d_text"></span>
     </label>
     <button id="submit">Submit</button>
+    <p id="result"></p>
   </div>
 
   <script>
-    const quizData = [
+    // Array of questions
+    var questions = [
       {
         question: "Which language runs in a web browser?",
         a: "Java",
@@ -66,7 +79,7 @@
         a: "Hypertext Markup Language",
         b: "Hypertext Markdown Language",
         c: "Hyperloop Machine Language",
-        d: "Helicopters Terminals Motorboats Lamborginis",
+        d: "Helicopters Terminals Motorboats Lamborghinis",
         correct: "a"
       },
       {
@@ -79,40 +92,65 @@
       }
     ];
 
-    const quizContainer = document.getElementById("quiz");
-    const questionElement = document.getElementById("question");
-    const optionElements = document.querySelectorAll("input[name='options']");
-    const optionLabels = document.querySelectorAll("label span");
-    const submitButton = document.getElementById("submit");
+    var currentQuestion = 0;
+    var score = 0;
 
-    let currentQuestion = 0;
-    let score = 0;
+    var quizContainer = document.getElementById("quiz");
+    var questionElement = document.getElementById("question");
+    var aText = document.getElementById("a_text");
+    var bText = document.getElementById("b_text");
+    var cText = document.getElementById("c_text");
+    var dText = document.getElementById("d_text");
+    var submitButton = document.getElementById("submit");
+    var resultElement = document.getElementById("result");
 
     function loadQuestion() {
-      const currentQuizData = quizData[currentQuestion];
-      questionElement.textContent = currentQuizData.question;
-      optionLabels[0].textContent = currentQuizData.a;
-      optionLabels[1].textContent = currentQuizData.b;
-      optionLabels[2].textContent = currentQuizData.c;
-      optionLabels[3].textContent = currentQuizData.d;
-      deselectOptions();
+      var currentQuiz = questions[currentQuestion];
+      questionElement.textContent = currentQuiz.question;
+      aText.textContent = currentQuiz.a;
+      bText.textContent = currentQuiz.b;
+      cText.textContent = currentQuiz.c;
+      dText.textContent = currentQuiz.d;
     }
 
-    function getSelectedOption() {
-      let selectedOption = undefined;
-      optionElements.forEach(optionElement => {
-        if (optionElement.checked) {
-          selectedOption = optionElement.id;
+    function checkAnswer() {
+      var answer = document.querySelector('input[name="answer"]:checked');
+      if (!answer) {
+        return false; // User hasn't selected an option
+      }
+
+      if (answer.id === questions[currentQuestion].correct) {
+        score++;
+      }
+
+      currentQuestion++;
+      answer.checked = false;
+
+      return true;
+    }
+
+    function showResult() {
+      quizContainer.innerHTML = "<h2>Quiz Completed</h2>";
+      resultElement.textContent = "Your score: " + score + " out of " + questions.length;
+      var reloadButton = document.createElement("button");
+      reloadButton.textContent = "Reload Quiz";
+      reloadButton.addEventListener("click", function() {
+        location.reload();
+      });
+      quizContainer.appendChild(reloadButton);
+    }
+
+    submitButton.addEventListener("click", function() {
+      if (checkAnswer()) {
+        if (currentQuestion === questions.length) {
+          showResult();
+        } else {
+          loadQuestion();
         }
-      });
-      return selectedOption;
-    }
+      }
+    });
 
-    function deselectOptions() {
-      optionElements.forEach(optionElement => {
-        optionElement.checked = false;
-      });
-    }
-
-    function submitAnswer() {
-      const selected
+    loadQuestion();
+  </script>
+</body>
+</html>
